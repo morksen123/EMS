@@ -18,16 +18,14 @@ import { useState } from "react";
 import { SignInSchema } from "@/schema";
 import AuthFormWrapper from "./AuthFormWrapper";
 import { signIn } from "@/app/auth/actions";
+import { signInFormDefaultValues } from "@/constants";
 
 const SignInForm = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const form = useForm({
     resolver: zodResolver(SignInSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+    defaultValues: signInFormDefaultValues,
   });
 
   const handleUserSignIn = async (data: z.infer<typeof SignInSchema>) => {
