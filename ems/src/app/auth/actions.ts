@@ -4,9 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { z } from "zod";
-import { SignUpSchema } from "@/schema";
+import { SignInSchema, SignUpSchema } from "@/schema";
 
-export async function login(formData: z.infer<typeof SignUpSchema>) {
+export async function signIn(formData: z.infer<typeof SignInSchema>) {
   const supabase = createClient();
 
   const userData = {
@@ -17,7 +17,7 @@ export async function login(formData: z.infer<typeof SignUpSchema>) {
   const { error } = await supabase.auth.signInWithPassword(userData);
 
   if (error) {
-    redirect("/error");
+    return error.message;
   }
 
   revalidatePath("/", "layout");
@@ -40,9 +40,9 @@ export async function signUp(formData: z.infer<typeof SignUpSchema>) {
   const { error } = await supabase.auth.signUp(userData);
 
   if (error) {
-    redirect("/error");
+    return error.message;
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/sign-in");
 }

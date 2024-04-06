@@ -21,6 +21,7 @@ import AuthFormWrapper from "./AuthFormWrapper";
 
 const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const form = useForm({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
@@ -32,15 +33,19 @@ const SignUpForm = () => {
     },
   });
 
-  const handleUserSignUp = (data: z.infer<typeof SignUpSchema>) => {
+  const handleUserSignUp = async (data: z.infer<typeof SignUpSchema>) => {
     setLoading(true);
-    signUp(data);
+    const errorMessage = await signUp(data);
+
+    if (errorMessage) {
+      setErrorMessage(errorMessage);
+      setLoading(false);
+    }
   };
 
   const { pending } = useFormStatus();
   return (
     <AuthFormWrapper
-      label="Create an account"
       title="Register"
       backButtonHref="/sign-in"
       backButtonLabel="Already have an account? Login here."
@@ -116,6 +121,11 @@ const SignUpForm = () => {
                 </FormItem>
               )}
             />
+            {errorMessage && (
+              <p className="text-sm font-medium text-destructive">
+                {errorMessage}
+              </p>
+            )}
           </div>
           <Button type="submit" className="w-full" disabled={pending}>
             {loading ? "Processing..." : "Register"}

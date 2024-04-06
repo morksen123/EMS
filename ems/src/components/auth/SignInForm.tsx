@@ -15,37 +15,43 @@ import { Button } from "../ui/button";
 import { z } from "zod";
 import { useFormStatus } from "react-dom";
 import { useState } from "react";
-import { SignUpSchema } from "@/schema";
-import CardWrapper from "./AuthFormWrapper";
+import { SignInSchema } from "@/schema";
+import AuthFormWrapper from "./AuthFormWrapper";
+import { signIn } from "@/app/auth/actions";
 
 const SignInForm = () => {
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const form = useForm({
-    resolver: zodResolver(SignUpSchema),
+    resolver: zodResolver(SignInSchema),
     defaultValues: {
       email: "",
-      name: "",
-      phoneNumber: "",
       password: "",
-      confirmPassword: "",
     },
   });
 
-  const onSubmit = (data: z.infer<typeof SignUpSchema>) => {
+  const handleUserSignIn = async (data: z.infer<typeof SignInSchema>) => {
     setLoading(true);
-    console.log(data);
+    const errorMessage = await signIn(data);
+
+    if (errorMessage) {
+      setErrorMessage(errorMessage);
+      setLoading(false);
+    }
   };
 
   const { pending } = useFormStatus();
   return (
-    <CardWrapper
-      label="Create an account"
-      title="Register"
-      backButtonHref="/auth/login"
-      backButtonLabel="Already have an account? Login here."
+    <AuthFormWrapper
+      title="Login"
+      backButtonHref="/sign-up"
+      backButtonLabel="Don't have an account? Register here."
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form
+          onSubmit={form.handleSubmit(handleUserSignIn)}
+          className="space-y-6"
+        >
           <div className="space-y-4">
             <FormField
               control={form.control}
@@ -54,24 +60,7 @@ const SignInForm = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      type="email"
-                      placeholder="johndoe@gmail.com"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="John Doe" />
+                    <Input {...field} type="email" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -84,32 +73,24 @@ const SignInForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input {...field} type="password" placeholder="******" />
+                    <Input {...field} type="password" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="password" placeholder="******" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {errorMessage && (
+              <p className="text-sm font-medium text-destructive">
+                {errorMessage}
+              </p>
+            )}
           </div>
           <Button type="submit" className="w-full" disabled={pending}>
-            {loading ? "Loading..." : "Register"}
+            {loading ? "Logging in..." : "Login"}
           </Button>
         </form>
       </Form>
-    </CardWrapper>
+    </AuthFormWrapper>
   );
 };
 

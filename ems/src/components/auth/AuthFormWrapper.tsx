@@ -8,7 +8,6 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 
 interface AuthFormWrapperProps {
-  label: string;
   title: string;
   backButtonHref: string;
   backButtonLabel: string;
@@ -16,7 +15,6 @@ interface AuthFormWrapperProps {
 }
 
 const AuthFormWrapper = ({
-  label,
   title,
   backButtonHref,
   backButtonLabel,
@@ -27,7 +25,6 @@ const AuthFormWrapper = ({
       <CardHeader>
         <div className="w-full flex flex-col gap-y-4 items-center">
           <h1 className="text-3xl font-semibold">{title}</h1>
-          <p className="text-muted-foreground">{label}</p>
         </div>
       </CardHeader>
       <CardContent>{children}</CardContent>
