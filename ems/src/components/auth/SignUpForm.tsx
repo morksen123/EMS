@@ -16,7 +16,7 @@ import { z } from "zod";
 import { useFormStatus } from "react-dom";
 import { useState } from "react";
 import { SignUpSchema } from "@/schema";
-import { signUp } from "@/app/actions/auth/actions";
+import { signUp } from "@/lib/actions/auth/actions";
 import AuthFormWrapper from "./AuthFormWrapper";
 import { signUpFormDefaultValues } from "@/constants";
 
@@ -38,7 +38,8 @@ const SignUpForm = () => {
     }
   };
 
-  const { pending } = useFormStatus();
+  const isFormSubmitting = form.formState.isSubmitting;
+
   return (
     <AuthFormWrapper
       title="Register"
@@ -122,8 +123,8 @@ const SignUpForm = () => {
               </p>
             )}
           </div>
-          <Button type="submit" className="w-full" disabled={pending}>
-            {loading ? "Processing..." : "Register"}
+          <Button type="submit" className="w-full" disabled={isFormSubmitting}>
+            {isFormSubmitting ? "Processing..." : "Register"}
           </Button>
         </form>
       </Form>

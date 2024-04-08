@@ -20,7 +20,7 @@ import { Textarea } from "../ui/textarea";
 import Image from "next/image";
 import { FileUploader } from "../shared/FileUploader";
 import CalendarFormInput from "../shared/Calendar";
-import { createEvent } from "@/app/actions/events/actions";
+import { createEvent } from "@/lib/actions/events/actions";
 import { useUser } from "@/contexts/UserContext";
 
 const EventForm = () => {

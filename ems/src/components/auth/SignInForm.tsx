@@ -17,7 +17,7 @@ import { useFormStatus } from "react-dom";
 import { useState } from "react";
 import { SignInSchema } from "@/schema";
 import AuthFormWrapper from "./AuthFormWrapper";
-import { signIn } from "@/app/actions/auth/actions";
+import { signIn } from "@/lib/actions/auth/actions";
 import { signInFormDefaultValues } from "@/constants";
 
 const SignInForm = () => {
@@ -38,7 +38,8 @@ const SignInForm = () => {
     }
   };
 
-  const { pending } = useFormStatus();
+  const isFormSubmitting = form.formState.isSubmitting;
+
   return (
     <AuthFormWrapper
       title="Login"
@@ -83,8 +84,8 @@ const SignInForm = () => {
               </p>
             )}
           </div>
-          <Button type="submit" className="w-full" disabled={pending}>
-            {loading ? "Logging in..." : "Login"}
+          <Button type="submit" className="w-full" disabled={isFormSubmitting}>
+            {isFormSubmitting ? "Logging in..." : "Login"}
           </Button>
         </form>
       </Form>

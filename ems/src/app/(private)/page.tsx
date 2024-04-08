@@ -5,17 +5,6 @@ import Link from "next/link";
 type HomeProps = {};
 
 export default async function Home(props: HomeProps) {
-  // const page = Number(searchParams?.page) || 1;
-  // const searchText = (searchParams?.query as string) || "";
-  // const category = (searchParams?.category as string) || "";
-
-  // const events = await getAllEvents({
-  //   query: searchText,
-  //   category,
-  //   page,
-  //   limit: 6,
-  // });
-
   return (
     <>
       <section className="bg-primary-50 bg-dotted-pattern bg-contain py-10">

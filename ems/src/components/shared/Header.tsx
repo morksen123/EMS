@@ -1,8 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import React from "react";
 import { Button } from "../ui/button";
+import AvatarDropdown from "../profile/AvatarDropdown";
+import { useUser } from "@/contexts/UserContext";
 
 const Header = () => {
+  const { user } = useUser();
   return (
     <header>
       <div className="max-w-7xl lg:mx-auto p-5 md:px-10 xl:px-0 w-full flex items-center justify-between">
@@ -11,13 +16,19 @@ const Header = () => {
             VibeVault
           </h1>
         </Link>
-        <div className="flex w-32 justify-end gap-3">
+        <div className="flex w-32 justify-end gap-5 items-center">
+          {/* create event */}
           <Button className="rounded-full" size={"lg"}>
             <Link href="/events/create">Create Event</Link>
           </Button>
-          <Button className="rounded-full" size={"lg"}>
-            <Link href="/sign-in">Login</Link>
-          </Button>
+          {/* login */}
+          {!user && (
+            <Button className="rounded-full" size={"lg"}>
+              <Link href="/sign-in">Login</Link>
+            </Button>
+          )}
+          {/* avatar */}
+          <AvatarDropdown />
         </div>
       </div>
     </header>
