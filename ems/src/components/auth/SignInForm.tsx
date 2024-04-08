@@ -17,7 +17,7 @@ import { useFormStatus } from "react-dom";
 import { useState } from "react";
 import { SignInSchema } from "@/schema";
 import AuthFormWrapper from "./AuthFormWrapper";
-import { signIn } from "@/app/auth/actions";
+import { signIn } from "@/app/actions/auth/actions";
 import { signInFormDefaultValues } from "@/constants";
 
 const SignInForm = () => {
