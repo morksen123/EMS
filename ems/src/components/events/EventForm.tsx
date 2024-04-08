@@ -12,7 +12,6 @@ import { useForm } from "react-hook-form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { z } from "zod";
-import { useFormStatus } from "react-dom";
 import { useState } from "react";
 import { EventFormSchema } from "@/schema";
 import { eventCategories, eventDefaultValues } from "@/constants";
@@ -21,18 +20,23 @@ import { Textarea } from "../ui/textarea";
 import Image from "next/image";
 import { FileUploader } from "../shared/FileUploader";
 import CalendarFormInput from "../shared/Calendar";
+import { createEvent } from "@/app/actions/events/actions";
+import { useUser } from "@/contexts/UserContext";
 
 const EventForm = () => {
-  const [loading, setLoading] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
+  const { user } = useUser();
   const form = useForm({
     resolver: zodResolver(EventFormSchema),
     defaultValues: eventDefaultValues,
   });
 
-  const handleCreateEvent = (data: z.infer<typeof EventFormSchema>) => {};
+  const handleCreateEvent = (data: z.infer<typeof EventFormSchema>) => {
+    createEvent(data, user?.id);
+  };
 
-  const { pending } = useFormStatus();
+  const isFormSubmitting = form.formState.isSubmitting;
+
   return (
     <Form {...form}>
       <form
@@ -149,8 +153,8 @@ const EventForm = () => {
           />
         </div>
 
-        <Button type="submit" className="w-full" disabled={pending}>
-          {loading ? "Logging in..." : "Login"}
+        <Button type="submit" className="w-full" disabled={isFormSubmitting}>
+          {isFormSubmitting ? "Submitting..." : "Create Event"}
         </Button>
       </form>
     </Form>
