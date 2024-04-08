@@ -16,7 +16,7 @@ import { z } from "zod";
 import { useFormStatus } from "react-dom";
 import { useState } from "react";
 import { SignUpSchema } from "@/schema";
-import { signUp } from "@/app/auth/actions";
+import { signUp } from "@/app/actions/auth/actions";
 import AuthFormWrapper from "./AuthFormWrapper";
 import { signUpFormDefaultValues } from "@/constants";
 
