@@ -6,10 +6,7 @@ import { createClient } from "@/utils/supabase/server";
 import { z } from "zod";
 import { EventFormSchema } from "@/schema";
 
-export async function createEvent(
-  formData: z.infer<typeof EventFormSchema>,
-  userId?: string
-) {
+export async function createEvent(formData: z.infer<typeof EventFormSchema>) {
   const supabase = createClient();
 
   const eventData = {

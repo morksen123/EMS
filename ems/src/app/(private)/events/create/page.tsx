@@ -9,9 +9,9 @@ function CreateEventPage() {
         </h3>
       </section>
 
-      <div className="wrapper my-8">
+      <section className="wrapper my-8">
         <EventForm />
-      </div>
+      </section>
     </>
   );
 }

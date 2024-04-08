@@ -47,3 +47,16 @@ export const EventFormSchema = z.object({
   registrationDeadline: z.date(),
   categoryId: z.string(),
 });
+
+export const ProfileFormSchema = z.object({
+  email: z.string().email({
+    message: "Please enter a valid email address",
+  }),
+  name: z.string().min(1, {
+    message: "Please enter your name",
+  }),
+  phone_number: z.string().min(8, {
+    message: "Phone number must be at least 8 characters long",
+  }),
+  avatar_url: z.string(),
+});
