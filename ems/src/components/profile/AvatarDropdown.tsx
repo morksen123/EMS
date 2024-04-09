@@ -12,10 +12,33 @@ import {
 import { LogOut } from "lucide-react";
 import { signOut } from "@/lib/actions/auth/actions";
 import Link from "next/link";
+import { useUser } from "@/contexts/UserContext";
+import { useEffect, useState } from "react";
+import { getUserProfile } from "@/lib/actions/profile/actions";
+import { UserProfile } from "@/app/(private)/profile/page";
 
 type AvatarDropdownProps = {};
 
 const AvatarDropdown = ({}: AvatarDropdownProps) => {
+  const { user } = useUser();
+  const [userProfile, setUserProfile] = useState<UserProfile>();
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (user) {
+        const userData = (await getUserProfile(user.id)) as UserProfile;
+        userData.billing_address = userData.billing_address ?? "";
+        userData.home_address = userData.home_address ?? "";
+        userData.avatar_url = userData.avatar_url = userData.avatar_url
+          ? `https://vxxdicxhpxdjptsqhdul.supabase.co/storage/v1/object/public/avatars/${user.id}/${userData.avatar_url}`
+          : "";
+        setUserProfile(userData);
+      }
+    };
+
+    fetchUserProfile();
+  }, [user]);
+
   const handleSignOut = () => {
     signOut();
   };
@@ -24,7 +47,13 @@ const AvatarDropdown = ({}: AvatarDropdownProps) => {
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
+          <AvatarImage
+            src={
+              userProfile?.avatar_url !== ""
+                ? userProfile?.avatar_url
+                : "/assets/images/default-profile-pic.jpeg"
+            }
+          />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>

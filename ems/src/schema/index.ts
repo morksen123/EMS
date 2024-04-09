@@ -58,5 +58,7 @@ export const ProfileFormSchema = z.object({
   phone_number: z.string().min(8, {
     message: "Phone number must be at least 8 characters long",
   }),
-  avatar_url: z.string(),
+  home_address: z.string().nullable(),
+  billing_address: z.string().nullable(),
+  avatar_url: z.string().nullable(),
 });

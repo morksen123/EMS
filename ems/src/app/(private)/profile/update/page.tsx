@@ -9,31 +9,71 @@ import {
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
 import { z } from "zod";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ProfileFormSchema } from "@/schema";
-import { FileUploader } from "../shared/FileUploader";
 import { UserProfile } from "@/app/(private)/profile/page";
+import {
+  getUserProfile,
+  updateUserProfile,
+} from "@/lib/actions/profile/actions";
+import { useUser } from "@/contexts/UserContext";
+import { uploadImageToBucket } from "@/lib/actions/actions";
+import { buildFormDataFromFile, buildMediaStoragePath } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { FileUploader } from "@/components/shared/FileUploader";
+import { Button } from "@/components/ui/button";
+import { profileFormDefaultValues } from "@/constants";
+import Link from "next/link";
 
-type ProfileFormProps = {
-  defaultFormValues?: UserProfile;
-  setIsEditModeEnabled: Dispatch<SetStateAction<boolean>>;
-};
-
-const ProfileForm = ({
-  defaultFormValues,
-  setIsEditModeEnabled,
-}: ProfileFormProps) => {
+const UpdateUserProfile = () => {
   const [files, setFiles] = useState<File[]>([]);
+  const [defaultFormValues, setDefaultFormValues] = useState<UserProfile>(
+    profileFormDefaultValues
+  );
+  const { user } = useUser();
   const form = useForm({
     resolver: zodResolver(ProfileFormSchema),
     defaultValues: defaultFormValues,
   });
 
-  const handleUpdateProfile = (data: z.infer<typeof ProfileFormSchema>) => {
-    setIsEditModeEnabled(false);
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (user) {
+        const userData = (await getUserProfile(user.id)) as UserProfile;
+        userData.billing_address = userData.billing_address ?? "";
+        userData.home_address = userData.home_address ?? "";
+        userData.avatar_url = userData.avatar_url = userData.avatar_url
+          ? `https://vxxdicxhpxdjptsqhdul.supabase.co/storage/v1/object/public/avatars/${user.id}/${userData.avatar_url}`
+          : "";
+        setDefaultFormValues(userData);
+        form.reset(userData);
+      }
+    };
+
+    fetchUserProfile();
+  }, [user, form]);
+
+  const handleUpdateProfile = async (
+    formData: z.infer<typeof ProfileFormSchema>
+  ) => {
+    if (!user) return;
+
+    try {
+      let updatedProfilePayload = { ...formData };
+
+      if (files.length > 0) {
+        const fileName = files[0].name;
+        updatedProfilePayload.avatar_url = fileName;
+        const storagePath = buildMediaStoragePath(user.id, fileName);
+        const fileFormData = buildFormDataFromFile(files[0]);
+        await uploadImageToBucket("avatars", storagePath, fileFormData);
+      }
+
+      await updateUserProfile(updatedProfilePayload, user.id);
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+    }
   };
 
   const isFormSubmitting = form.formState.isSubmitting;
@@ -140,7 +180,12 @@ const ProfileForm = ({
               )}
             />
           </div>
-          <div className="flex justify-end">
+          <div className="flex gap-2 justify-end">
+            <Link href="/profile">
+              <Button type="submit" className="w-30 rounded-full">
+                Cancel
+              </Button>
+            </Link>
             <Button
               type="submit"
               className="w-30 rounded-full"
@@ -155,4 +200,4 @@ const ProfileForm = ({
   );
 };
 
-export default ProfileForm;
+export default UpdateUserProfile;

@@ -28,3 +28,12 @@ export const eventCategories = [
   { id: "seminars", name: "Seminars" },
   { id: "exhibition", name: "Exhibition" },
 ];
+
+export const profileFormDefaultValues = {
+  name: "",
+  phone_number: "",
+  email: "",
+  avatar_url: "",
+  home_address: "",
+  billing_address: "",
+};

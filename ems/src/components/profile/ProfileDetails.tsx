@@ -1,36 +1,32 @@
 import { UserProfile } from "@/app/(private)/profile/page";
 import { EditIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 type ProfileDetailsProps = {
-  toggleEditMode: () => void;
-  userProfile?: UserProfile;
+  userProfile: UserProfile;
 };
 
-const userData = {
-  name: "John Doe",
-  phoneNumber: "+1234567590",
-  email: "john.doe@example.com",
-  profilePhoto: "/assets/images/default-profile-pic.jpeg", // Placeholder path, replace with your actual image path
-};
-
-const ProfileDetails = ({
-  toggleEditMode,
-  userProfile,
-}: ProfileDetailsProps) => {
+const ProfileDetails = ({ userProfile }: ProfileDetailsProps) => {
   return (
     <>
       <section className="wrapper my-5 space-y-5">
         <div className="flex  justify-between items-center">
           <h4 className="text-3xl font-bold">Profile Picture</h4>
-          <EditIcon className="cursor-pointer" onClick={toggleEditMode} />
+          <Link href="/profile/update">
+            <EditIcon className="cursor-pointer" />
+          </Link>
         </div>
         <div className="relative w-32 h-32">
           <Image
-            src={userData.profilePhoto}
+            src={
+              userProfile.avatar_url === ""
+                ? "/assets/images/default-profile-pic.jpeg"
+                : userProfile.avatar_url
+            }
+            height={200}
+            width={200}
             alt="Profile Photo"
-            layout="fill"
-            objectFit="cover"
             className="rounded-full"
           />
         </div>
