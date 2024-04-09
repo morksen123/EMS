@@ -20,19 +20,17 @@ import { Textarea } from "../ui/textarea";
 import Image from "next/image";
 import { FileUploader } from "../shared/FileUploader";
 import CalendarFormInput from "../shared/Calendar";
-import { createEvent } from "@/app/actions/events/actions";
-import { useUser } from "@/contexts/UserContext";
+import { createEvent } from "@/lib/actions/events/actions";
 
 const EventForm = () => {
   const [files, setFiles] = useState<File[]>([]);
-  const { user } = useUser();
   const form = useForm({
     resolver: zodResolver(EventFormSchema),
     defaultValues: eventDefaultValues,
   });
 
   const handleCreateEvent = (data: z.infer<typeof EventFormSchema>) => {
-    createEvent(data, user?.id);
+    createEvent(data);
   };
 
   const isFormSubmitting = form.formState.isSubmitting;

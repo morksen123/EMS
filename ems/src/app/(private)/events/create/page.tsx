@@ -1,6 +1,6 @@
 import EventForm from "@/components/events/EventForm";
 
-export default function CreateEvent() {
+function CreateEventPage() {
   return (
     <>
       <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
@@ -9,9 +9,11 @@ export default function CreateEvent() {
         </h3>
       </section>
 
-      <div className="wrapper my-8">
+      <section className="wrapper my-8">
         <EventForm />
-      </div>
+      </section>
     </>
   );
 }
+
+export default CreateEventPage;

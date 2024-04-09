@@ -41,23 +41,23 @@ export function FileUploader({
           <Image
             src={imageUrl}
             alt="image"
-            width={250}
-            height={250}
-            className="w-full object-cover object-center"
+            width={300}
+            height={300}
+            className="w-4/5 object-cover object-center"
           />
         </div>
       ) : (
         <div className="flex-center flex-col py-5 text-grey-500">
           <Image
             src="/assets/icons/upload.svg"
-            width={77}
-            height={77}
+            width={50}
+            height={50}
             alt="file upload"
           />
           <h3 className="mb-2 mt-2">Drag photo here</h3>
-          <p className="p-medium-12 mb-4">SVG, PNG, JPG</p>
+          <p className="p-medium-12 mb-4">PNG, JPG</p>
           <Button type="button" className="rounded-full">
-            Select from computer
+            Select from device
           </Button>
         </div>
       )}
