@@ -63,8 +63,13 @@ const AvatarDropdown = ({}: AvatarDropdownProps) => {
         <Link href="/profile" className="max-w-xl">
           <DropdownMenuItem>Profile</DropdownMenuItem>
         </Link>
-        <DropdownMenuItem>Events Joined</DropdownMenuItem>
-        <DropdownMenuItem>Events Organised</DropdownMenuItem>
+        <Link href="/events/events-joined" className="max-w-xl">
+          <DropdownMenuItem>Events Joined</DropdownMenuItem>
+        </Link>
+        <Link href="/events/events-organized" className="max-w-xl">
+          <DropdownMenuItem>Events Organised</DropdownMenuItem>
+        </Link>
+
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut}>
           <LogOut className="mr-2 h-4 w-4" />
