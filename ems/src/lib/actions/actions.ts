@@ -1,8 +1,6 @@
 "use server";
 
 import { supabase } from "@/utils/supabase/server";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 export async function uploadImageToBucket(
   bucketName: string,
@@ -17,7 +15,8 @@ export async function uploadImageToBucket(
     });
 
   if (error || !data) {
-    redirect("/error");
+    console.log(error);
+    return error.message;
   }
 
   return { data, error };

@@ -3,20 +3,20 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
-import { z } from "zod";
-import { EventFormSchema } from "@/schema";
+import { EventInterface } from "@/components/events/EventForm";
 
-export async function createEvent(formData: z.infer<typeof EventFormSchema>) {
+export async function createEvent(eventFormData: EventInterface) {
   const supabase = createClient();
 
   const eventData = {
-    event_title: formData.title,
-    event_date: formData.eventDate,
-    event_location: formData.location,
-    event_description: formData.description,
-    registration_deadline: formData.registrationDeadline,
-    category_id: formData.categoryId,
-    image_url: formData.imageUrl,
+    id: eventFormData.id,
+    event_title: eventFormData.title,
+    event_date: eventFormData.eventDate,
+    event_location: eventFormData.location,
+    event_description: eventFormData.description,
+    registration_deadline: eventFormData.registrationDeadline,
+    category_id: eventFormData.categoryId,
+    image_url: eventFormData.imageUrl,
   };
 
   const { data, error } = await supabase

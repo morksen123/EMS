@@ -21,6 +21,13 @@ import Image from "next/image";
 import { FileUploader } from "../shared/FileUploader";
 import CalendarFormInput from "../shared/Calendar";
 import { createEvent } from "@/lib/actions/events/actions";
+import { buildFormDataFromFile, buildMediaStoragePath } from "@/lib/utils";
+import { uploadImageToBucket } from "@/lib/actions/actions";
+import { v4 as uuidv4 } from "uuid";
+
+export type EventInterface = z.infer<typeof EventFormSchema> & {
+  id?: string;
+};
 
 const EventForm = () => {
   const [files, setFiles] = useState<File[]>([]);
@@ -29,8 +36,25 @@ const EventForm = () => {
     defaultValues: eventDefaultValues,
   });
 
-  const handleCreateEvent = (data: z.infer<typeof EventFormSchema>) => {
-    createEvent(data);
+  const handleCreateEvent = async (
+    formData: z.infer<typeof EventFormSchema>
+  ) => {
+    try {
+      let eventPayload = { ...formData } as EventInterface;
+
+      if (files.length > 0) {
+        const fileName = files[0].name;
+        eventPayload.imageUrl = fileName;
+        eventPayload.id = uuidv4();
+        const storagePath = buildMediaStoragePath(eventPayload.id, fileName);
+        const fileFormData = buildFormDataFromFile(files[0]);
+        await uploadImageToBucket("events", storagePath, fileFormData);
+      }
+
+      await createEvent(eventPayload);
+    } catch (error) {
+      console.error("Failed to create event:", error);
+    }
   };
 
   const isFormSubmitting = form.formState.isSubmitting;
