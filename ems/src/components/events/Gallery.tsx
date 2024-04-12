@@ -1,9 +1,9 @@
 import { IEvent } from "@/models";
 import { Card, CardDescription, CardHeader, CardImage } from "../ui/card";
-import { SkeletonCard } from "../shared/SkeletonCard";
 import { BreadCrumb } from "../shared/Breadcrumb";
 import { deleteEvent } from "@/lib/actions/events/actions";
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 
 type GalleryProps = {
   data: IEvent[];
@@ -36,32 +36,37 @@ const Gallery = ({ data }: GalleryProps) => {
             {galleryItems.map((event) => {
               return (
                 <li key={event.id} className="flex justify-center">
-                  <Card className="w-[300px]">
-                    <CardImage
-                      src={
-                        event.image_url === ""
-                          ? "/assets/images/default-profile-pic.jpeg"
-                          : `https://vxxdicxhpxdjptsqhdul.supabase.co/storage/v1/object/public/events/${event.id}/${event.image_url}`
-                      }
-                    />
-                    <CardHeader>
-                      <div className="flex justify-between items-end">
-                        <h4 className="text-xl font-semibold line-clamp-1">
-                          {event.event_title}
-                        </h4>
-                        <BreadCrumb
-                          type="events_organized"
-                          eventId={event.id}
-                          onDelete={handleDeleteEvent}
-                        />
-                      </div>
-                      <CardDescription className="line-clamp-2">
-                        {event.event_description}
-                      </CardDescription>
-                      <CardDescription>{event.event_date}</CardDescription>
-                      <CardDescription>{event.event_location}</CardDescription>
-                    </CardHeader>
-                  </Card>
+                  <Link href={`/events/${event.id}`}>
+                    <Card className="w-[300px]">
+                      <CardImage
+                        src={
+                          event.image_url === ""
+                            ? "/assets/images/default-profile-pic.jpeg"
+                            : `https://vxxdicxhpxdjptsqhdul.supabase.co/storage/v1/object/public/events/${event.id}/${event.image_url}`
+                        }
+                      />
+
+                      <CardHeader>
+                        <div className="flex justify-between items-end">
+                          <h4 className="text-xl font-semibold line-clamp-1">
+                            {event.event_title}
+                          </h4>
+                          <BreadCrumb
+                            type="events_organized"
+                            eventId={event.id}
+                            onDelete={handleDeleteEvent}
+                          />
+                        </div>
+                        <CardDescription className="line-clamp-2">
+                          {event.event_description}
+                        </CardDescription>
+                        <CardDescription>{event.event_date}</CardDescription>
+                        <CardDescription>
+                          {event.event_location}
+                        </CardDescription>
+                      </CardHeader>
+                    </Card>
+                  </Link>
                 </li>
               );
             })}

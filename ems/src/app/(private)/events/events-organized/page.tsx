@@ -1,7 +1,6 @@
 "use client";
 
 import Gallery from "@/components/events/Gallery";
-import { SkeletonCard } from "@/components/shared/SkeletonCard";
 import SkeletonLoader from "@/components/shared/SkeletonLoader";
 import { useUser } from "@/contexts/UserContext";
 import { IEvent } from "@/models";

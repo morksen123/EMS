@@ -2,8 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { supabase } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server";
 import { EventInterface } from "@/components/events/EventForm";
+import { IEvent } from "@/models";
+
+const supabase = createClient();
 
 export async function createEvent(eventFormData: EventInterface) {
   const eventData = {
@@ -45,4 +48,17 @@ export async function deleteEvent(eventId: string) {
   if (data) {
     return data[0].id;
   }
+}
+
+export async function getEventById(eventId: string) {
+  const { error, data } = await supabase
+    .from("event")
+    .select()
+    .eq("id", eventId);
+
+  if (error) {
+    redirect("/error");
+  }
+
+  return data[0] as IEvent;
 }
