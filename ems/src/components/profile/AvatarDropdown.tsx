@@ -67,7 +67,7 @@ const AvatarDropdown = ({}: AvatarDropdownProps) => {
         </Link>
         <Link href="/events/events-joined" className="max-w-xl">
           <DropdownMenuItem className="cursor-pointer">
-            Events Joined
+            Events Registered
           </DropdownMenuItem>
         </Link>
         <Link href="/events/events-organized" className="max-w-xl">

@@ -14,8 +14,9 @@ export default async function Home(props: HomeProps) {
             <p className="p-regular-24">
               Explore and connect at the hottest events in Singapore!
             </p>
-            <Button size="lg" asChild className="button w-full sm:w-fit">
-              <Link href="#events">Explore Now</Link>
+
+            <Button size="lg" className="button w-full sm:w-fit">
+              <Link href="/events/search-events">Explore Now</Link>
             </Button>
           </div>
 

@@ -1,8 +1,8 @@
 import { IEvent } from "@/models";
 import { Card, CardDescription, CardHeader, CardImage } from "../ui/card";
 import { BreadCrumb } from "../shared/Breadcrumb";
-import { deleteEvent } from "@/lib/actions/events/actions";
-import { useCallback, useEffect, useState } from "react";
+import { deleteEvent, registerForEvent } from "@/lib/actions/events/actions";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 
 type GalleryProps = {
@@ -12,6 +12,7 @@ type GalleryProps = {
 // TODO: pagination
 const Gallery = ({ data }: GalleryProps) => {
   const [galleryItems, setGalleryItems] = useState(data);
+  const [hasJoinedEvent, setHasJoinedEvent] = useState(false);
 
   const handleDeleteEvent = useCallback(
     async (eventId: string) => {
@@ -24,9 +25,13 @@ const Gallery = ({ data }: GalleryProps) => {
     [galleryItems]
   );
 
-  useEffect(() => {
-    console.log(galleryItems);
-  }, [galleryItems]);
+  const handleJoinEvent = useCallback(
+    async (eventId: string) => {
+      setHasJoinedEvent(!hasJoinedEvent);
+      await registerForEvent(eventId);
+    },
+    [hasJoinedEvent]
+  );
 
   return (
     <>
@@ -51,11 +56,6 @@ const Gallery = ({ data }: GalleryProps) => {
                           <h4 className="text-xl font-semibold line-clamp-1">
                             {event.event_title}
                           </h4>
-                          <BreadCrumb
-                            type="events_organized"
-                            eventId={event.id}
-                            onDelete={handleDeleteEvent}
-                          />
                         </div>
                         <CardDescription className="line-clamp-2">
                           {event.event_description}

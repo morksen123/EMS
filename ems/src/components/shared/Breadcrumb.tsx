@@ -12,12 +12,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 type BreadCrumbProps = {
-  type: "events_organized" | "events_joined" | "events";
   eventId: string;
   onDelete?: (eventId: string) => Promise<void>;
+  onJoin?: (eventId: string) => void;
+  hasJoinedEvent?: boolean;
 };
 
-export function BreadCrumb({ eventId, onDelete, type }: BreadCrumbProps) {
+export function BreadCrumb({
+  eventId,
+  onDelete,
+  onJoin,
+  hasJoinedEvent,
+}: BreadCrumbProps) {
   return (
     <Breadcrumb>
       <BreadcrumbItem>
@@ -26,12 +32,19 @@ export function BreadCrumb({ eventId, onDelete, type }: BreadCrumbProps) {
             <BreadcrumbEllipsis className="h-4 w-4" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuItem
-              className="text-red-500"
-              onClick={() => onDelete && onDelete(eventId)}
-            >
-              Delete
-            </DropdownMenuItem>
+            {onDelete && (
+              <DropdownMenuItem
+                className="text-red-500"
+                onClick={() => onDelete && onDelete(eventId)}
+              >
+                Delete
+              </DropdownMenuItem>
+            )}
+            {!hasJoinedEvent && (
+              <DropdownMenuItem onClick={() => onJoin && onJoin(eventId)}>
+                {!hasJoinedEvent ? "Register" : "Unregister"}
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </BreadcrumbItem>
