@@ -1,40 +1,76 @@
 import { IEvent } from "@/models";
-import { Card } from "../ui/card";
-import { Pagination } from "../ui/pagination";
+import { Card, CardDescription, CardHeader, CardImage } from "../ui/card";
+import { SkeletonCard } from "../shared/SkeletonCard";
+import { BreadCrumb } from "../shared/Breadcrumb";
+import { deleteEvent } from "@/lib/actions/events/actions";
+import { useCallback, useEffect, useState } from "react";
 
 type GalleryProps = {
   data: IEvent[];
-  // emptyTitle: string;
-  // emptyStateSubtext: string;
-  // limit: number;
-  page?: number | string;
-  totalPages?: number;
-  // urlParamName?: string;
-  // collectionType?: "Events_Organized" | "My_Tickets" | "All_Events";
 };
 
-const Gallery = ({ data, page, totalPages = 0 }: GalleryProps) => {
+// TODO: pagination
+const Gallery = ({ data }: GalleryProps) => {
+  const [galleryItems, setGalleryItems] = useState(data);
+
+  const handleDeleteEvent = useCallback(
+    async (eventId: string) => {
+      const updatedGalleryItems = galleryItems?.filter(
+        (item: IEvent) => item.id !== eventId
+      );
+      setGalleryItems(updatedGalleryItems);
+      await deleteEvent(eventId);
+    },
+    [galleryItems]
+  );
+
+  useEffect(() => {
+    console.log(galleryItems);
+  }, [galleryItems]);
+
   return (
     <>
-      {data.length > 0 ? (
+      {galleryItems.length > 0 ? (
         <div className="flex flex-col items-center gap-10">
-          <ul className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:gap-10">
-            {data.map((event) => {
+          <ul className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-10">
+            {galleryItems.map((event) => {
               return (
                 <li key={event.id} className="flex justify-center">
-                  <Card />
+                  <Card className="w-[300px]">
+                    <CardImage
+                      src={
+                        event.image_url === ""
+                          ? "/assets/images/default-profile-pic.jpeg"
+                          : `https://vxxdicxhpxdjptsqhdul.supabase.co/storage/v1/object/public/events/${event.id}/${event.image_url}`
+                      }
+                    />
+                    <CardHeader>
+                      <div className="flex justify-between items-end">
+                        <h4 className="text-xl font-semibold line-clamp-1">
+                          {event.event_title}
+                        </h4>
+                        <BreadCrumb
+                          type="events_organized"
+                          eventId={event.id}
+                          onDelete={handleDeleteEvent}
+                        />
+                      </div>
+                      <CardDescription className="line-clamp-2">
+                        {event.event_description}
+                      </CardDescription>
+                      <CardDescription>{event.event_date}</CardDescription>
+                      <CardDescription>{event.event_location}</CardDescription>
+                    </CardHeader>
+                  </Card>
                 </li>
               );
             })}
           </ul>
-
-          {totalPages > 1 && <Pagination />}
         </div>
       ) : (
-        <div className="flex-center wrapper min-h-[200px] w-full flex-col gap-3 rounded-[14px] bg-grey-50 py-28 text-center">
-          <h3 className="p-bold-20 md:h5-bold">hey</h3>
-          <p className="p-regular-14">hey3</p>
-        </div>
+        <h4 className="text-2xl font-semibold text-center sm:text-left">
+          *You have not created any events yet*
+        </h4>
       )}
     </>
   );

@@ -2,6 +2,7 @@
 
 import Gallery from "@/components/events/Gallery";
 import { SkeletonCard } from "@/components/shared/SkeletonCard";
+import SkeletonLoader from "@/components/shared/SkeletonLoader";
 import { useUser } from "@/contexts/UserContext";
 import { IEvent } from "@/models";
 import { createClient } from "@/utils/supabase/client";
@@ -16,7 +17,7 @@ const EventsOrganizedPage = () => {
         </div>
       </section>
 
-      <section>
+      <section className=" py-5 md:py-10">
         <EventGalleryWrapper />
       </section>
     </>
@@ -43,8 +44,11 @@ const EventGalleryWrapper = () => {
 
     fetchEventsOrganizedByUser();
   }, [user, supabase]);
-
-  return <>{eventData ? <Gallery data={eventData} /> : <SkeletonCard />}</>;
+  return (
+    <div className="wrapper flex items-center justify-center sm:justify-between">
+      {eventData ? <Gallery data={eventData} /> : <SkeletonLoader />}
+    </div>
+  );
 };
 
 export default EventsOrganizedPage;
