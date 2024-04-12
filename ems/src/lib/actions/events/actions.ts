@@ -74,5 +74,5 @@ export async function registerForEvent(eventId: string) {
     return error.message;
   }
 
-  redirect("/events/events-joined");
+  return data;
 }

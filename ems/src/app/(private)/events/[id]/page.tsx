@@ -2,9 +2,10 @@
 
 import SkeletonLoader from "@/components/shared/SkeletonLoader";
 import { Button } from "@/components/ui/button";
-import { getEventById } from "@/lib/actions/events/actions";
+import { getEventById, registerForEvent } from "@/lib/actions/events/actions";
 import { getUserProfile } from "@/lib/actions/profile/actions";
 import { IEvent } from "@/models";
+import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -17,11 +18,21 @@ type EventDetailsProps = {
 const EventDetails = ({ params: { id } }: EventDetailsProps) => {
   const [eventDetails, setEventDetails] = useState<IEvent>();
   const [userName, setUserName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [isRegisteredForEvent, setIsRegisteredForEvent] = useState(false);
+  const [isPassedRegistrationDeadline, setIsPassedRegistrationDeadline] =
+    useState(false);
+  const supabase = createClient();
+
+  const isButtonDisabled =
+    loading || isRegisteredForEvent || isPassedRegistrationDeadline;
 
   useEffect(() => {
     const fetchEventDetails = async () => {
       const event = await getEventById(id);
       setEventDetails(event);
+
+      setIsPassedRegistrationDeadline(event.registration_deadline < new Date());
     };
 
     fetchEventDetails();
@@ -37,6 +48,29 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
 
     fetchUserProfile();
   }, [eventDetails]);
+
+  useEffect(() => {
+    const getEventRegistrationId = async () => {
+      const { data, error } = await supabase
+        .from("eventRegistration")
+        .select("id")
+        .limit(1)
+        .single();
+
+      if (data) {
+        setIsRegisteredForEvent(true);
+      }
+    };
+
+    getEventRegistrationId();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleRegisterUser = async () => {
+    setLoading(true);
+    await registerForEvent(id);
+    setLoading(false);
+  };
 
   if (!eventDetails) {
     return <SkeletonLoader />;
@@ -103,13 +137,25 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
             <div className="gap-10 mb-4">
               <p className="text-lg font-medium flex gap-2 mb-4">
                 Register by:{" "}
-                <p className="font-bold">
+                <span className="font-bold">
                   {new Date(
                     eventDetails.registration_deadline
                   ).toLocaleDateString()}
-                </p>
+                </span>
               </p>
-              <Button className="rounded-full px-6 py-2 ">Register Now</Button>
+              <Button
+                className="rounded-full px-6 py-2 bg-red-500"
+                disabled={isButtonDisabled}
+                onClick={handleRegisterUser}
+              >
+                {loading
+                  ? "Registering..."
+                  : isRegisteredForEvent
+                  ? "Registered"
+                  : isPassedRegistrationDeadline
+                  ? "Registration Closed"
+                  : "Register Now"}
+              </Button>
             </div>
 
             <div className="description">
