@@ -62,3 +62,17 @@ export async function getEventById(eventId: string) {
 
   return data[0] as IEvent;
 }
+
+export async function registerForEvent(eventId: string) {
+  const { data, error } = await supabase
+    .from("eventRegistration")
+    .upsert({ event_id: eventId })
+    .select("*");
+
+  if (error) {
+    console.log(error);
+    return error.message;
+  }
+
+  redirect("/events/events-joined");
+}
