@@ -19,7 +19,7 @@ const Header = () => {
         <div className="flex w-32 justify-end gap-5 items-center">
           {/* search events */}
           <Button className="rounded-full" size={"lg"}>
-            <Link href="/events/create">Search Events</Link>
+            <Link href="/events/search-events">Search Events</Link>
           </Button>
           {/* create event */}
           <Button className="rounded-full" size={"lg"}>
