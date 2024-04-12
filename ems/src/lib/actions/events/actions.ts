@@ -4,10 +4,11 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { EventInterface } from "@/components/events/EventForm";
+import { IEvent } from "@/models";
+
+const supabase = createClient();
 
 export async function createEvent(eventFormData: EventInterface) {
-  const supabase = createClient();
-
   const eventData = {
     id: eventFormData.id,
     event_title: eventFormData.title,
@@ -31,4 +32,33 @@ export async function createEvent(eventFormData: EventInterface) {
 
   revalidatePath("/", "layout");
   redirect("/");
+}
+
+export async function deleteEvent(eventId: string) {
+  const { data, error } = await supabase
+    .from("event")
+    .delete()
+    .eq("id", eventId)
+    .select();
+
+  if (error) {
+    console.log(error);
+  }
+
+  if (data) {
+    return data[0].id;
+  }
+}
+
+export async function getEventById(eventId: string) {
+  const { error, data } = await supabase
+    .from("event")
+    .select()
+    .eq("id", eventId);
+
+  if (error) {
+    redirect("/error");
+  }
+
+  return data[0] as IEvent;
 }
