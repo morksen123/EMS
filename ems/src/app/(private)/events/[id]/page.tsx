@@ -1,7 +1,9 @@
 "use client";
 
 import SkeletonLoader from "@/components/shared/SkeletonLoader";
+import { Button } from "@/components/ui/button";
 import { getEventById } from "@/lib/actions/events/actions";
+import { getUserProfile } from "@/lib/actions/profile/actions";
 import { IEvent } from "@/models";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -14,6 +16,7 @@ type EventDetailsProps = {
 
 const EventDetails = ({ params: { id } }: EventDetailsProps) => {
   const [eventDetails, setEventDetails] = useState<IEvent>();
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
     const fetchEventDetails = async () => {
@@ -23,6 +26,17 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
 
     fetchEventDetails();
   }, [id]);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (eventDetails) {
+        const profile = await getUserProfile(eventDetails?.event_host_id);
+        setUserName(profile?.name);
+      }
+    };
+
+    fetchUserProfile();
+  }, [eventDetails]);
 
   if (!eventDetails) {
     return <SkeletonLoader />;
@@ -40,8 +54,9 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
           <div className="w-full">
             <Image
               src={
-                `https://vxxdicxhpxdjptsqhdul.supabase.co/storage/v1/object/public/events/${eventDetails.id}/${eventDetails.image_url}` ||
-                "/assets/images/default-profile-pic.jpeg"
+                eventDetails.image_url
+                  ? `https://vxxdicxhpxdjptsqhdul.supabase.co/storage/v1/object/public/events/${eventDetails.id}/${eventDetails.image_url}`
+                  : "/assets/images/default-profile-pic.jpeg"
               }
               alt="Event Image"
               width={1000}
@@ -49,45 +64,59 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
             />
           </div>
 
-          <div className="content bg-white w-full p-5 rounded-lg shadow-lg">
+          <section className="wrapper">
             <h1 className="text-3xl font-bold mb-3">
               {eventDetails.event_title}
             </h1>
-            <div className=" mb-5">
-              <p className="text-sm text-gray-500">
-                Hosted by{" "}
-                <span className="text-primary-500">
-                  {eventDetails.event_host_id}
-                </span>
+            <div className="flex items-center mb-5">
+              <p className="text-md text-gray-500">
+                Hosted by <span className="text-primary-500">{userName}</span>
               </p>
-              <p className="text-sm rounded-full bg-grey-500/10 px-4 py-2.5 text-grey-500 w-[120px] my-2 text-center">
+            </div>
+
+            <div className="flex gap-4 items-center mb-4">
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/assets/icons/calendar.svg"
+                  alt="calendar"
+                  width={24}
+                  height={24}
+                />
+                <p>{new Date(eventDetails.event_date).toLocaleDateString()}</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/assets/icons/location.svg"
+                  alt="location"
+                  width={24}
+                  height={24}
+                />
+                <p>{eventDetails.event_location}</p>
+              </div>
+
+              <p className="text-sm rounded-full bg-grey-500/10 px-4 py-1 text-grey-500  text-center">
                 {eventDetails.category_id}
               </p>
             </div>
 
-            <div className="date-location flex gap-4 items-center mb-5">
-              <Image
-                src="/assets/icons/calendar.svg"
-                alt="calendar"
-                width={24}
-                height={24}
-              />
-              <p>{new Date(eventDetails.event_date).toLocaleDateString()}</p>
-
-              <Image
-                src="/assets/icons/location.svg"
-                alt="location"
-                width={24}
-                height={24}
-              />
-              <p>{eventDetails.event_location}</p>
+            {/* Registration Information */}
+            <div className="gap-10 mb-4">
+              <p className="text-lg font-medium flex gap-2 mb-4">
+                Register by:{" "}
+                <p className="font-bold">
+                  {new Date(
+                    eventDetails.registration_deadline
+                  ).toLocaleDateString()}
+                </p>
+              </p>
+              <Button className="rounded-full px-6 py-2 ">Register Now</Button>
             </div>
 
             <div className="description">
               <h2 className="text-xl font-semibold mb-2">Description:</h2>
               <p>{eventDetails.event_description}</p>
             </div>
-          </div>
+          </section>
         </div>
       </section>
     </>
