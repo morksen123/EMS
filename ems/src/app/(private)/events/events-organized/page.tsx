@@ -42,10 +42,15 @@ const EventGalleryWrapper = () => {
     };
 
     fetchEventsOrganizedByUser();
-  }, [user, supabase]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
   return (
     <div className="wrapper flex items-center justify-center sm:justify-between">
-      {eventData ? <Gallery data={eventData} /> : <SkeletonLoader />}
+      {eventData ? (
+        <Gallery type="organized" data={eventData} />
+      ) : (
+        <SkeletonLoader />
+      )}
     </div>
   );
 };

@@ -74,5 +74,39 @@ export async function registerForEvent(eventId: string) {
     return error.message;
   }
 
-  redirect("/events/events-joined");
+  return data;
+}
+
+export async function unregisterForEvent(eventId: string, userId: string) {
+  const { data, error } = await supabase
+    .from("eventRegistration")
+    .delete()
+    .eq("event_id", eventId)
+    .eq("user_id", userId);
+
+  if (error) {
+    console.log(error);
+    return error.message;
+  }
+
+  return data;
+}
+
+export async function getRegisteredEvents(userId: string) {
+  const { data, error } = await supabase
+    .from("event")
+    .select(
+      `
+          *,
+          eventRegistration: eventRegistration!inner(*)
+      `
+    )
+    .eq("eventRegistration.user_id", userId);
+
+  if (error) {
+    console.error("Error fetching registered events:", error);
+    return [];
+  }
+
+  return data;
 }

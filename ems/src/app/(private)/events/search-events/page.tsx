@@ -95,9 +95,11 @@ const EventGalleryWrapper = ({ searchTerm }: EventGalleryWrapperProps) => {
       {loading ? (
         <SkeletonLoader />
       ) : eventData.length > 0 ? (
-        <Gallery data={eventData} />
+        <Gallery type="search" data={eventData} />
       ) : (
-        <p>No events found.</p> // Display message when no data is found
+        <h4 className="text-2xl font-semibold text-center sm:text-left">
+          No events found.
+        </h4>
       )}
     </div>
   );
