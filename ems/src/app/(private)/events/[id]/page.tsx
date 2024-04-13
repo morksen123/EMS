@@ -7,7 +7,7 @@ import { getUserProfile } from "@/lib/actions/profile/actions";
 import { IEvent } from "@/models";
 import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 type EventDetailsProps = {
   params: {
@@ -24,15 +24,13 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
     useState(false);
   const supabase = createClient();
 
-  const isButtonDisabled =
-    loading || isRegisteredForEvent || isPassedRegistrationDeadline;
-
   useEffect(() => {
     const fetchEventDetails = async () => {
       const event = await getEventById(id);
       setEventDetails(event);
-
-      setIsPassedRegistrationDeadline(event.registration_deadline < new Date());
+      setIsPassedRegistrationDeadline(
+        new Date(event.registration_deadline).getDate() < new Date().getDate()
+      );
     };
 
     fetchEventDetails();
@@ -53,11 +51,9 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
     const getEventRegistrationId = async () => {
       const { data, error } = await supabase
         .from("eventRegistration")
-        .select("id")
-        .limit(1)
-        .single();
+        .select("id");
 
-      if (data) {
+      if (data && data?.length > 0) {
         setIsRegisteredForEvent(true);
       }
     };
@@ -67,10 +63,29 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
   }, []);
 
   const handleRegisterUser = async () => {
+    if (isPassedRegistrationDeadline) {
+      return;
+    }
     setLoading(true);
     await registerForEvent(id);
+    setIsRegisteredForEvent(true);
     setLoading(false);
   };
+
+  const isButtonDisabled =
+    loading || isRegisteredForEvent || isPassedRegistrationDeadline;
+
+  const buttonLabel = useMemo(() => {
+    if (loading) {
+      return "Registering...";
+    } else if (isPassedRegistrationDeadline) {
+      return "Registration Closed";
+    } else if (isRegisteredForEvent) {
+      return "Registered";
+    } else {
+      return "Register Now";
+    }
+  }, [loading, isPassedRegistrationDeadline, isRegisteredForEvent]);
 
   if (!eventDetails) {
     return <SkeletonLoader />;
@@ -144,17 +159,11 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
                 </span>
               </p>
               <Button
-                className="rounded-full px-6 py-2 bg-red-500"
+                className="rounded-full px-6 py-2 bg-red-600 hover:bg-red-500"
                 disabled={isButtonDisabled}
                 onClick={handleRegisterUser}
               >
-                {loading
-                  ? "Registering..."
-                  : isRegisteredForEvent
-                  ? "Registered"
-                  : isPassedRegistrationDeadline
-                  ? "Registration Closed"
-                  : "Register Now"}
+                {buttonLabel}
               </Button>
             </div>
 
