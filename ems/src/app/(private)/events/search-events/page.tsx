@@ -5,7 +5,6 @@ import SkeletonLoader from "@/components/shared/SkeletonLoader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useUser } from "@/contexts/UserContext";
 import { IEvent } from "@/models";
 import { createClient } from "@/utils/supabase/client";
 import { useEffect, useState } from "react";
@@ -24,7 +23,7 @@ const SearchEventsPage = () => {
 
   return (
     <>
-      <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
+      <section className="bg-primary-50  bg-cover bg-center py-5 md:py-10">
         <div className="wrapper flex items-center justify-center sm:justify-between">
           <h3 className="h3-bold text-center sm:text-left">Search Events</h3>
         </div>
@@ -33,9 +32,9 @@ const SearchEventsPage = () => {
       <section className="py-5 md:py-10">
         <div className="wrapper">
           <Label htmlFor="search">Search Events</Label>
-          <div className="flex w-full max-w-sm items-center space-x-2">
+          <div className="flex w-full max-w-sm items-center space-x-4">
             <Input
-              className="w-full sm:w-[300px]" // Make input responsive
+              className="w-full sm:w-[300px]"
               type="text"
               id="search"
               placeholder="e.g., 'festival'"

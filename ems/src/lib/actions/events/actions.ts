@@ -31,7 +31,7 @@ export async function createEvent(eventFormData: EventInterface) {
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/events/events-organized");
 }
 
 export async function deleteEvent(eventId: string) {

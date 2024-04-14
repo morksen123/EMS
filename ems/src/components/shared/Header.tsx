@@ -18,21 +18,38 @@ const Header = () => {
         </Link>
         <div className="flex w-32 justify-end gap-5 items-center">
           {/* search events */}
-          <Button className="rounded-full" size={"lg"}>
+          <Button
+            asChild
+            variant={"secondary"}
+            className="rounded-full"
+            size={"lg"}
+          >
             <Link href="/events/search-events">Search Events</Link>
           </Button>
           {/* create event */}
-          <Button className="rounded-full" size={"lg"}>
-            <Link href="/events/create">Create Event</Link>
+          <Button
+            asChild
+            variant={"secondary"}
+            className="rounded-full"
+            size={"lg"}
+          >
+            <Link href={user ? "/events/create" : "/sign-in"}>
+              Create Event
+            </Link>
           </Button>
           {/* login */}
           {!user && (
-            <Button className="rounded-full" size={"lg"}>
+            <Button
+              asChild
+              variant={"secondary"}
+              className="rounded-full"
+              size={"lg"}
+            >
               <Link href="/sign-in">Login</Link>
             </Button>
           )}
           {/* avatar */}
-          <AvatarDropdown />
+          {user && <AvatarDropdown />}
         </div>
       </div>
     </header>

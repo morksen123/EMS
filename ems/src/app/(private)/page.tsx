@@ -7,7 +7,7 @@ type HomeProps = {};
 export default async function Home(props: HomeProps) {
   return (
     <>
-      <section className="bg-primary-50 bg-dotted-pattern bg-contain py-10">
+      <section className="bg-primary-50  bg-contain py-10">
         <div className="wrapper grid gap-5 grid-cols-2">
           <div className="flex flex-col justify-center gap-8">
             <h1 className="h1-bold">Unlock Your Moments, Amplify the Vibes</h1>
@@ -15,7 +15,7 @@ export default async function Home(props: HomeProps) {
               Explore and connect at the hottest events in Singapore!
             </p>
 
-            <Button size="lg" className="button w-full sm:w-fit">
+            <Button asChild size="lg" className="button w-full sm:w-fit">
               <Link href="/events/search-events">Explore Now</Link>
             </Button>
           </div>

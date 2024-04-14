@@ -43,9 +43,7 @@ const UpdateUserProfile = () => {
         const userData = (await getUserProfile(user.id)) as UserProfile;
         userData.billing_address = userData.billing_address ?? "";
         userData.home_address = userData.home_address ?? "";
-        userData.avatar_url = userData.avatar_url = userData.avatar_url
-          ? `https://vxxdicxhpxdjptsqhdul.supabase.co/storage/v1/object/public/avatars/${user.id}/${userData.avatar_url}`
-          : "";
+        userData.avatar_url = "";
         setDefaultFormValues(userData);
         form.reset(userData);
       }
@@ -182,13 +180,17 @@ const UpdateUserProfile = () => {
           </div>
           <div className="flex gap-2 justify-end">
             <Link href="/profile">
-              <Button type="submit" className="w-30 rounded-full">
+              <Button
+                type="submit"
+                className="min-w-20 rounded-full"
+                variant="secondary"
+              >
                 Cancel
               </Button>
             </Link>
             <Button
               type="submit"
-              className="w-30 rounded-full"
+              className="min-w-20 rounded-full "
               disabled={isFormSubmitting}
             >
               {isFormSubmitting ? "Saving..." : "Save"}

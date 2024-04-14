@@ -17,19 +17,17 @@ const ProfileDetails = ({ userProfile }: ProfileDetailsProps) => {
             <EditIcon className="cursor-pointer" />
           </Link>
         </div>
-        <div className="relative w-32 h-32">
-          <Image
-            src={
-              userProfile.avatar_url === ""
-                ? "/assets/images/default-profile-pic.jpeg"
-                : userProfile.avatar_url
-            }
-            height={200}
-            width={200}
-            alt="Profile Photo"
-            className="rounded-full"
-          />
-        </div>
+        <Image
+          src={
+            userProfile.avatar_url === ""
+              ? "/assets/images/default-profile-pic.jpeg"
+              : userProfile.avatar_url
+          }
+          height={200}
+          width={250}
+          alt="Profile Photo"
+          className="rounded-2xl"
+        />
       </section>
       <section className="wrapper my-5 space-y-5">
         <h4 className="text-3xl font-bold">Contact Details</h4>
@@ -52,7 +50,7 @@ const ProfileDetails = ({ userProfile }: ProfileDetailsProps) => {
         <h4 className="text-3xl font-bold">Home Address</h4>
         <div className="text-center sm:text-left ">
           {userProfile?.home_address ? (
-            <h4 className="text-2xl font-bold">{userProfile?.home_address}</h4>
+            <p className="text-md mt-2">{userProfile?.home_address}</p>
           ) : (
             <p className="text-md mt-2">*Update your home address*</p>
           )}
@@ -62,9 +60,7 @@ const ProfileDetails = ({ userProfile }: ProfileDetailsProps) => {
         <h4 className="text-3xl font-bold">Billing Address</h4>
         <div className="text-center sm:text-left ">
           {userProfile?.billing_address ? (
-            <h4 className="text-2xl font-bold">
-              {userProfile?.billing_address}
-            </h4>
+            <p className="text-md mt-2">{userProfile?.billing_address}</p>
           ) : (
             <p className="text-md mt-2">*Update your billing address*</p>
           )}

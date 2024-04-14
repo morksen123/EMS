@@ -56,6 +56,6 @@ export async function signOut() {
     redirect("/error");
   }
 
-  revalidatePath("/", "layout");
+  revalidatePath("/", "page");
   redirect("/sign-in");
 }

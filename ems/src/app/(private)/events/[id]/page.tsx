@@ -24,7 +24,6 @@ type EventDetailsProps = {
 
 const EventDetails = ({ params: { id } }: EventDetailsProps) => {
   const [eventDetails, setEventDetails] = useState<IEvent>();
-  const [triggerAttendance, setTriggerAttendance] = useState(true);
   const [eventAttendeesList, setEventAttendeesList] = useState<
     IEventAttendees[]
   >([]);
@@ -114,14 +113,14 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
 
   return (
     <>
-      <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
+      <section className="bg-primary-50  bg-cover bg-center py-5 md:py-10">
         <div className="wrapper flex items-center justify-center sm:justify-between">
           <h3 className="h3-bold text-center sm:text-left">Events Details</h3>
         </div>
       </section>
       <section className="wrapper">
-        <div className="flex flex-col items-center gap-10">
-          <div className="w-full">
+        <div className="flex flex-col items-start gap-10">
+          <div className="rounded-2xl w-full overflow-hidden border-2 border-gray-300 bg-white">
             <Image
               src={
                 eventDetails.image_url
@@ -131,6 +130,7 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
               alt="Event Image"
               width={1000}
               height={600}
+              className="w-full object-contain"
             />
           </div>
 
@@ -197,15 +197,12 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
       </section>
       {eventDetails.event_host_id === user?.id && (
         <>
-          <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center">
+          <section className="bg-primary-50  bg-cover bg-center">
             <div className="wrapper flex items-center justify-center sm:justify-between">
               <h3 className="h3-bold text-center sm:text-left">
                 Event Attendance
               </h3>
-              <StatisticsButton
-                triggerAttendance={triggerAttendance}
-                eventId={id}
-              />
+              <StatisticsButton eventId={id} />
             </div>
           </section>
           <section className="wrapper mb-[100px]">
@@ -215,7 +212,6 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
                   key={user.user_id}
                   user={user}
                   eventId={id}
-                  setTriggerAttendance={setTriggerAttendance}
                   initialAttendanceState={user.attended}
                 />
               ))}

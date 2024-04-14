@@ -18,7 +18,7 @@ type GalleryProps = {
   type: "registration" | "organized" | "search";
 };
 
-// TODO: pagination
+// TODO: pagination, modal for delete/unregister
 const Gallery = ({ data, type }: GalleryProps) => {
   const [galleryItems, setGalleryItems] = useState(data);
   const { user } = useUser();
@@ -36,7 +36,7 @@ const Gallery = ({ data, type }: GalleryProps) => {
 
   const handleUnregisterUser = useCallback(
     async (event: IEvent, userId: string) => {
-      if (new Date(event.event_date) < new Date()) {
+      if (new Date(event.event_date).getDate() < new Date().getDate()) {
         return;
       }
       const updatedGalleryItems = galleryItems.filter(
@@ -56,8 +56,8 @@ const Gallery = ({ data, type }: GalleryProps) => {
             {galleryItems.map((event) => {
               return (
                 <li key={event.id} className="flex justify-center">
-                  <Link href={`/events/${event.id}`}>
-                    <Card className="w-[300px]">
+                  <Card className="w-[300px]">
+                    <Link href={`/events/${event.id}`}>
                       <CardImage
                         src={
                           event.image_url === ""
@@ -91,44 +91,40 @@ const Gallery = ({ data, type }: GalleryProps) => {
                           />
                           {event.event_location}
                         </CardDescription>
-                        <CardDescription className="line-clamp-2">
+                        <CardDescription className="line-clamp-2 min-h-[3rem]">
                           {event.event_description}
                         </CardDescription>
                       </CardHeader>
-                      <CardFooter>
-                        {type === "registration" && (
-                          <Button
-                            disabled={new Date(event.event_date) < new Date()}
-                            className="w-full rounded-full bg-red-400"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              user && handleUnregisterUser(event, user?.id);
-                            }}
-                          >
-                            Unregister
-                          </Button>
-                        )}
-                        {type === "organized" && (
-                          <div className="flex w-full gap-3">
-                            <Button className="flex-1 rounded-full">
-                              <Link href={`/events/${event.id}`}>
-                                Attendance
-                              </Link>
-                            </Button>
-                            <Button
-                              className="flex-1 rounded-full bg-red-500"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteEvent(event.id);
-                              }}
-                            >
-                              Delete Event
-                            </Button>
-                          </div>
-                        )}
-                      </CardFooter>
-                    </Card>
-                  </Link>
+                    </Link>
+                    <CardFooter>
+                      {type === "registration" && (
+                        <Button
+                          disabled={
+                            new Date(event.event_date).getDate() <
+                            new Date().getDate()
+                          }
+                          className="w-full rounded-full bg-red-600 hover:bg-red-500"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            user && handleUnregisterUser(event, user?.id);
+                          }}
+                        >
+                          Unregister
+                        </Button>
+                      )}
+                      {type === "organized" && (
+                        <Button
+                          className="flex-1 rounded-full bg-red-600 hover:bg-red-500"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteEvent(event.id);
+                          }}
+                        >
+                          Delete Event
+                        </Button>
+                      )}
+                    </CardFooter>
+                  </Card>
                 </li>
               );
             })}
@@ -136,7 +132,7 @@ const Gallery = ({ data, type }: GalleryProps) => {
         </div>
       ) : (
         <h4 className="text-2xl font-semibold text-center sm:text-left">
-          *You have not created any events yet*
+          *No events yet*
         </h4>
       )}
     </>
