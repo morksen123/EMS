@@ -1,10 +1,17 @@
 "use client";
 
+import { StatisticsButton } from "@/components/events/StatisticsButton";
+import UserAttendanceItem from "@/components/events/UserAttendanceItem";
 import SkeletonLoader from "@/components/shared/SkeletonLoader";
 import { Button } from "@/components/ui/button";
-import { getEventById, registerForEvent } from "@/lib/actions/events/actions";
+import { useUser } from "@/contexts/UserContext";
+import {
+  getEventAttendees,
+  getEventById,
+  registerForEvent,
+} from "@/lib/actions/events/actions";
 import { getUserProfile } from "@/lib/actions/profile/actions";
-import { IEvent } from "@/models";
+import { IEvent, IEventAttendees } from "@/models";
 import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
 import { useEffect, useState, useMemo } from "react";
@@ -17,12 +24,17 @@ type EventDetailsProps = {
 
 const EventDetails = ({ params: { id } }: EventDetailsProps) => {
   const [eventDetails, setEventDetails] = useState<IEvent>();
+  const [triggerAttendance, setTriggerAttendance] = useState(true);
+  const [eventAttendeesList, setEventAttendeesList] = useState<
+    IEventAttendees[]
+  >([]);
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(false);
   const [isRegisteredForEvent, setIsRegisteredForEvent] = useState(false);
   const [isPassedRegistrationDeadline, setIsPassedRegistrationDeadline] =
     useState(false);
   const supabase = createClient();
+  const { user } = useUser();
 
   useEffect(() => {
     const fetchEventDetails = async () => {
@@ -61,6 +73,15 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
     getEventRegistrationId();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const getAttendeesList = async () => {
+      const attendeesList = await getEventAttendees(id);
+      setEventAttendeesList(attendeesList);
+    };
+
+    getAttendeesList();
+  }, [id]);
 
   const handleRegisterUser = async () => {
     if (isPassedRegistrationDeadline) {
@@ -174,6 +195,34 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
           </section>
         </div>
       </section>
+      {eventDetails.event_host_id === user?.id && (
+        <>
+          <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center">
+            <div className="wrapper flex items-center justify-center sm:justify-between">
+              <h3 className="h3-bold text-center sm:text-left">
+                Event Attendance
+              </h3>
+              <StatisticsButton
+                triggerAttendance={triggerAttendance}
+                eventId={id}
+              />
+            </div>
+          </section>
+          <section className="wrapper mb-[100px]">
+            <div className="flex items-center justify-center sm:justify-between">
+              {eventAttendeesList.map((user) => (
+                <UserAttendanceItem
+                  key={user.user_id}
+                  user={user}
+                  eventId={id}
+                  setTriggerAttendance={setTriggerAttendance}
+                  initialAttendanceState={user.attended}
+                />
+              ))}
+            </div>
+          </section>
+        </>
+      )}
     </>
   );
 };
