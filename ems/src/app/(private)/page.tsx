@@ -15,7 +15,7 @@ export default async function Home(props: HomeProps) {
               Explore and connect at the hottest events in Singapore!
             </p>
 
-            <Button size="lg" className="button w-full sm:w-fit">
+            <Button asChild size="lg" className="button w-full sm:w-fit">
               <Link href="/events/search-events">Explore Now</Link>
             </Button>
           </div>
