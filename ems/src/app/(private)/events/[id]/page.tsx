@@ -119,8 +119,8 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
         </div>
       </section>
       <section className="wrapper">
-        <div className="flex flex-col items-center gap-10">
-          <div className="w-full">
+        <div className="flex flex-col items-start gap-10">
+          <div className="rounded-2xl w-full overflow-hidden border-2 border-gray-300 bg-white">
             <Image
               src={
                 eventDetails.image_url
@@ -130,6 +130,7 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
               alt="Event Image"
               width={1000}
               height={600}
+              className="w-full object-contain"
             />
           </div>
 

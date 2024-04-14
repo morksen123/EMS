@@ -17,19 +17,17 @@ const ProfileDetails = ({ userProfile }: ProfileDetailsProps) => {
             <EditIcon className="cursor-pointer" />
           </Link>
         </div>
-        <div className="relative w-32 h-32">
-          <Image
-            src={
-              userProfile.avatar_url === ""
-                ? "/assets/images/default-profile-pic.jpeg"
-                : userProfile.avatar_url
-            }
-            height={200}
-            width={200}
-            alt="Profile Photo"
-            className="rounded-full"
-          />
-        </div>
+        <Image
+          src={
+            userProfile.avatar_url === ""
+              ? "/assets/images/default-profile-pic.jpeg"
+              : userProfile.avatar_url
+          }
+          height={200}
+          width={250}
+          alt="Profile Photo"
+          className="rounded-2xl"
+        />
       </section>
       <section className="wrapper my-5 space-y-5">
         <h4 className="text-3xl font-bold">Contact Details</h4>
