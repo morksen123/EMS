@@ -24,6 +24,7 @@ import { createEvent } from "@/lib/actions/events/actions";
 import { buildFormDataFromFile, buildMediaStoragePath } from "@/lib/utils";
 import { uploadImageToBucket } from "@/lib/actions/actions";
 import { v4 as uuidv4 } from "uuid";
+import Link from "next/link";
 
 export type EventInterface = z.infer<typeof EventFormSchema> & {
   id?: string;
@@ -174,10 +175,18 @@ const EventForm = () => {
             {...form}
           />
         </div>
-
-        <Button type="submit" className="w-full" disabled={isFormSubmitting}>
-          {isFormSubmitting ? "Submitting..." : "Create Event"}
-        </Button>
+        <div className="flex gap-2 justify-end">
+          <Button asChild type="submit" className="w-30 rounded-full">
+            <Link href="/">Cancel</Link>
+          </Button>
+          <Button
+            type="submit"
+            className="w-30 rounded-full"
+            disabled={isFormSubmitting}
+          >
+            {isFormSubmitting ? "Submitting..." : "Create"}
+          </Button>
+        </div>
       </form>
     </Form>
   );
