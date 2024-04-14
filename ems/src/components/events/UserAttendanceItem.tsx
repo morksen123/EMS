@@ -6,14 +6,12 @@ import { createClient } from "@/utils/supabase/client";
 type UserAttendanceItemProps = {
   user: IEventAttendees;
   eventId: string;
-  setTriggerAttendance: (e: boolean) => void;
   initialAttendanceState: boolean;
 };
 
 const UserAttendanceItem = ({
   user,
   eventId,
-  setTriggerAttendance,
   initialAttendanceState,
 }: UserAttendanceItemProps) => {
   const [isChecked, setIsChecked] = useState(initialAttendanceState);
@@ -21,7 +19,6 @@ const UserAttendanceItem = ({
 
   const handleCheckboxChange = async () => {
     setIsChecked(!isChecked);
-    setTriggerAttendance(!isChecked);
     const { data, error } = await supabase
       .from("eventRegistration")
       .update({ attended: !isChecked })

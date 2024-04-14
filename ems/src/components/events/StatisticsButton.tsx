@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -13,30 +14,32 @@ import { getEventAttendees } from "@/lib/actions/events/actions";
 
 type StatisticsButtonProps = {
   eventId: string;
-  triggerAttendance: boolean;
 };
 
-export function StatisticsButton({
-  eventId,
-  triggerAttendance,
-}: StatisticsButtonProps) {
+export function StatisticsButton({ eventId }: StatisticsButtonProps) {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [eventAttendeesList, setEventAttendeesList] = useState<
     IEventAttendees[]
   >([]);
 
   useEffect(() => {
+    if (!dialogOpen) return;
     const getAttendeesList = async () => {
       const attendeesList = await getEventAttendees(eventId);
       setEventAttendeesList(attendeesList);
     };
     getAttendeesList();
-  }, [eventId, triggerAttendance]);
+  }, [eventId, dialogOpen]);
 
-  const present = eventAttendeesList.filter((user) => user.attended);
-  const notPresent = eventAttendeesList.filter((user) => !user.attended);
+  const present = useMemo(() => {
+    return eventAttendeesList.filter((user) => user.attended);
+  }, [eventAttendeesList]);
+  const notPresent = useMemo(() => {
+    return eventAttendeesList.filter((user) => !user.attended);
+  }, [eventAttendeesList]);
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <Button className="rounded-full" size="lg">
           Statistics
@@ -68,11 +71,13 @@ export function StatisticsButton({
             </ul>
           </div>
         </div>
-        <DialogClose asChild>
-          <Button className="mt-4" variant="secondary">
-            Close
-          </Button>
-        </DialogClose>
+        <DialogFooter className="sm:justify-start">
+          <DialogClose asChild>
+            <Button className="mt-4 rounded-full" variant="secondary">
+              Close
+            </Button>
+          </DialogClose>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

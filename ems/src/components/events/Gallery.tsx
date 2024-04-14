@@ -18,7 +18,7 @@ type GalleryProps = {
   type: "registration" | "organized" | "search";
 };
 
-// TODO: pagination
+// TODO: pagination, modal for delete/unregister
 const Gallery = ({ data, type }: GalleryProps) => {
   const [galleryItems, setGalleryItems] = useState(data);
   const { user } = useUser();

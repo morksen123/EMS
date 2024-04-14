@@ -20,7 +20,7 @@ const Header = () => {
           {/* search events */}
           <Button
             asChild
-            variant={"outline"}
+            variant={"secondary"}
             className="rounded-full"
             size={"lg"}
           >
@@ -29,7 +29,7 @@ const Header = () => {
           {/* create event */}
           <Button
             asChild
-            variant={"outline"}
+            variant={"secondary"}
             className="rounded-full"
             size={"lg"}
           >
@@ -41,7 +41,7 @@ const Header = () => {
           {!user && (
             <Button
               asChild
-              variant={"outline"}
+              variant={"secondary"}
               className="rounded-full"
               size={"lg"}
             >

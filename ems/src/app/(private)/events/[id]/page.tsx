@@ -24,7 +24,6 @@ type EventDetailsProps = {
 
 const EventDetails = ({ params: { id } }: EventDetailsProps) => {
   const [eventDetails, setEventDetails] = useState<IEvent>();
-  const [triggerAttendance, setTriggerAttendance] = useState(true);
   const [eventAttendeesList, setEventAttendeesList] = useState<
     IEventAttendees[]
   >([]);
@@ -202,10 +201,7 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
               <h3 className="h3-bold text-center sm:text-left">
                 Event Attendance
               </h3>
-              <StatisticsButton
-                triggerAttendance={triggerAttendance}
-                eventId={id}
-              />
+              <StatisticsButton eventId={id} />
             </div>
           </section>
           <section className="wrapper mb-[100px]">
@@ -215,7 +211,6 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
                   key={user.user_id}
                   user={user}
                   eventId={id}
-                  setTriggerAttendance={setTriggerAttendance}
                   initialAttendanceState={user.attended}
                 />
               ))}
