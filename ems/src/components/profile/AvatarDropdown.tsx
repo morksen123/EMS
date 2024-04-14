@@ -20,7 +20,7 @@ import { UserProfile } from "@/app/(private)/profile/page";
 type AvatarDropdownProps = {};
 
 const AvatarDropdown = ({}: AvatarDropdownProps) => {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
   const [userProfile, setUserProfile] = useState<UserProfile>();
 
   useEffect(() => {
@@ -40,6 +40,8 @@ const AvatarDropdown = ({}: AvatarDropdownProps) => {
   }, [user]);
 
   const handleSignOut = () => {
+    console.log("logout");
+    setUser(null);
     signOut();
   };
 

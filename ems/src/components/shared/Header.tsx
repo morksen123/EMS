@@ -33,7 +33,9 @@ const Header = () => {
             className="rounded-full"
             size={"lg"}
           >
-            <Link href="/events/create">Create Event</Link>
+            <Link href={user ? "/events/create" : "/sign-in"}>
+              Create Event
+            </Link>
           </Button>
           {/* login */}
           {!user && (
