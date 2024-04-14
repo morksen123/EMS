@@ -40,8 +40,6 @@ const AvatarDropdown = ({}: AvatarDropdownProps) => {
   }, [user]);
 
   const handleSignOut = () => {
-    console.log("logout");
-    setUser(null);
     signOut();
   };
 

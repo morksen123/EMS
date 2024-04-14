@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { createClient, supabase } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/server";
 import { z } from "zod";
 import { SignInSchema, SignUpSchema } from "@/schema";
 
@@ -48,12 +48,14 @@ export async function signUp(formData: z.infer<typeof SignUpSchema>) {
 }
 
 export async function signOut() {
+  const supabase = createClient();
+
   const { error } = await supabase.auth.signOut();
 
   if (error) {
     redirect("/error");
   }
 
-  revalidatePath("/", "layout");
-  redirect("/");
+  revalidatePath("/", "page");
+  redirect("/sign-in");
 }
