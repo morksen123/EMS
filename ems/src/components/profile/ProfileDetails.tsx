@@ -48,7 +48,7 @@ const ProfileDetails = ({ userProfile }: ProfileDetailsProps) => {
       </section>
       <section className="wrapper my-5 space-y-5">
         <h4 className="text-3xl font-bold">Home Address</h4>
-        <div className="text-center sm:text-left ">
+        <div className="sm:text-left ">
           {userProfile?.home_address ? (
             <p className="text-md mt-2">{userProfile?.home_address}</p>
           ) : (
@@ -58,7 +58,7 @@ const ProfileDetails = ({ userProfile }: ProfileDetailsProps) => {
       </section>
       <section className="wrapper my-5 space-y-5">
         <h4 className="text-3xl font-bold">Billing Address</h4>
-        <div className="text-center sm:text-left ">
+        <div className="sm:text-left ">
           {userProfile?.billing_address ? (
             <p className="text-md mt-2">{userProfile?.billing_address}</p>
           ) : (
