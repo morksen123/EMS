@@ -43,9 +43,7 @@ const UpdateUserProfile = () => {
         const userData = (await getUserProfile(user.id)) as UserProfile;
         userData.billing_address = userData.billing_address ?? "";
         userData.home_address = userData.home_address ?? "";
-        userData.avatar_url = userData.avatar_url = userData.avatar_url
-          ? `https://vxxdicxhpxdjptsqhdul.supabase.co/storage/v1/object/public/avatars/${user.id}/${userData.avatar_url}`
-          : "";
+        userData.avatar_url = "";
         setDefaultFormValues(userData);
         form.reset(userData);
       }
