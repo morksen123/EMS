@@ -60,18 +60,21 @@ const EventDetails = ({ params: { id } }: EventDetailsProps) => {
 
   useEffect(() => {
     const getEventRegistrationId = async () => {
-      const { data, error } = await supabase
-        .from("eventRegistration")
-        .select("id");
+      if (user) {
+        const { data, error } = await supabase
+          .from("eventRegistration")
+          .select("id")
+          .match({ event_id: id, user_id: user.id });
 
-      if (data && data?.length > 0) {
-        setIsRegisteredForEvent(true);
+        if (data && data?.length > 0) {
+          setIsRegisteredForEvent(true);
+        }
       }
     };
 
     getEventRegistrationId();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id, user]);
 
   useEffect(() => {
     const getAttendeesList = async () => {
