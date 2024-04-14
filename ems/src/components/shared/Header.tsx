@@ -47,7 +47,7 @@ const Header = () => {
             </Button>
           )}
           {/* avatar */}
-          <AvatarDropdown />
+          {user && <AvatarDropdown />}
         </div>
       </div>
     </header>
