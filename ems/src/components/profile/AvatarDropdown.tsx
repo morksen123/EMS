@@ -20,7 +20,7 @@ import { UserProfile } from "@/app/(private)/profile/page";
 type AvatarDropdownProps = {};
 
 const AvatarDropdown = ({}: AvatarDropdownProps) => {
-  const { user, setUser } = useUser();
+  const { user } = useUser();
   const [userProfile, setUserProfile] = useState<UserProfile>();
 
   useEffect(() => {
