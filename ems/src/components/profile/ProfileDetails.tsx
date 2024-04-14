@@ -52,7 +52,7 @@ const ProfileDetails = ({ userProfile }: ProfileDetailsProps) => {
         <h4 className="text-3xl font-bold">Home Address</h4>
         <div className="text-center sm:text-left ">
           {userProfile?.home_address ? (
-            <h4 className="text-2xl font-bold">{userProfile?.home_address}</h4>
+            <p className="text-md mt-2">{userProfile?.home_address}</p>
           ) : (
             <p className="text-md mt-2">*Update your home address*</p>
           )}
@@ -62,9 +62,7 @@ const ProfileDetails = ({ userProfile }: ProfileDetailsProps) => {
         <h4 className="text-3xl font-bold">Billing Address</h4>
         <div className="text-center sm:text-left ">
           {userProfile?.billing_address ? (
-            <h4 className="text-2xl font-bold">
-              {userProfile?.billing_address}
-            </h4>
+            <p className="text-md mt-2">{userProfile?.billing_address}</p>
           ) : (
             <p className="text-md mt-2">*Update your billing address*</p>
           )}
