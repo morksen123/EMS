@@ -36,7 +36,7 @@ const Gallery = ({ data, type }: GalleryProps) => {
 
   const handleUnregisterUser = useCallback(
     async (event: IEvent, userId: string) => {
-      if (new Date(event.event_date) < new Date()) {
+      if (new Date(event.event_date).getDate() < new Date().getDate()) {
         return;
       }
       const updatedGalleryItems = galleryItems.filter(
@@ -99,7 +99,10 @@ const Gallery = ({ data, type }: GalleryProps) => {
                     <CardFooter>
                       {type === "registration" && (
                         <Button
-                          disabled={new Date(event.event_date) < new Date()}
+                          disabled={
+                            new Date(event.event_date).getDate() <
+                            new Date().getDate()
+                          }
                           className="w-full rounded-full bg-red-600 hover:bg-red-500"
                           onClick={(e) => {
                             e.stopPropagation();
