@@ -109,15 +109,22 @@ const Gallery = ({ data, type }: GalleryProps) => {
                           </Button>
                         )}
                         {type === "organized" && (
-                          <Button
-                            className="w-full rounded-full bg-red-500"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDeleteEvent(event.id);
-                            }}
-                          >
-                            Delete Event
-                          </Button>
+                          <div className="flex w-full gap-3">
+                            <Button className="flex-1 rounded-full">
+                              <Link href={`/events/${event.id}`}>
+                                Attendance
+                              </Link>
+                            </Button>
+                            <Button
+                              className="flex-1 rounded-full bg-red-500"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteEvent(event.id);
+                              }}
+                            >
+                              Delete Event
+                            </Button>
+                          </div>
                         )}
                       </CardFooter>
                     </Card>

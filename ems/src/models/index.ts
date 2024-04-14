@@ -9,3 +9,10 @@ export interface IEvent {
   image_url: string;
   category_id: string;
 }
+
+export interface IEventAttendees {
+  user_id: string;
+  attended: boolean;
+  name: string;
+  email: string;
+}
