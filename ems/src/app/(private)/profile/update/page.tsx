@@ -180,13 +180,17 @@ const UpdateUserProfile = () => {
           </div>
           <div className="flex gap-2 justify-end">
             <Link href="/profile">
-              <Button type="submit" className="w-30 rounded-full">
+              <Button
+                type="submit"
+                className="min-w-20 rounded-full"
+                variant="secondary"
+              >
                 Cancel
               </Button>
             </Link>
             <Button
               type="submit"
-              className="w-30 rounded-full"
+              className="min-w-20 rounded-full "
               disabled={isFormSubmitting}
             >
               {isFormSubmitting ? "Saving..." : "Save"}

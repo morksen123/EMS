@@ -176,12 +176,17 @@ const EventForm = () => {
           />
         </div>
         <div className="flex gap-2 justify-end">
-          <Button asChild type="submit" className="w-30 rounded-full">
+          <Button
+            asChild
+            type="submit"
+            className="min-w-20 rounded-full"
+            variant="secondary"
+          >
             <Link href="/">Cancel</Link>
           </Button>
           <Button
             type="submit"
-            className="w-30 rounded-full"
+            className="min-w-20 rounded-full"
             disabled={isFormSubmitting}
           >
             {isFormSubmitting ? "Submitting..." : "Create"}
